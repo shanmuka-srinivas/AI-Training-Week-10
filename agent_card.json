@@ -1,0 +1,58 @@
+{
+  "_comment": "The AgentCard the kitchen squad's manager would advertise under A2A. This is the A2A equivalent of an MCP server's tools/list: the thing another agent fetches to discover what this one can do, how to talk to it, and how to authenticate. MCP connects an agent to TOOLS; A2A connects an agent to other AGENTS.",
+  "protocolVersion": "0.2.0",
+  "name": "kitchen-squad",
+  "description": "Answers questions about a specific set of 10 recipe cards: ingredient weights, method steps, allergens, and rescaling a recipe to the amount of an ingredient the cook actually has.",
+  "url": "http://localhost:8010/a2a",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "AI Engineering League - Track B (Recipes & food)",
+    "url": "https://example.invalid/kitchen-squad"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": true
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain", "application/json"],
+  "securitySchemes": {
+    "bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "description": "A per-caller token. Read-only: this agent never writes anything, so a stolen token leaks recipe questions, not data."
+    }
+  },
+  "security": [{ "bearer": [] }],
+  "skills": [
+    {
+      "id": "recipe-lookup",
+      "name": "Look up what a recipe card says",
+      "description": "Ingredient weights, method steps, times, temperatures, storage notes and allergens, quoted from the card.",
+      "tags": ["recipes", "cooking", "allergens"],
+      "examples": [
+        "How much caster sugar is in the buttermilk pancakes?",
+        "Does the traditional kimchi contain fish?"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/plain"]
+    },
+    {
+      "id": "recipe-scaling",
+      "name": "Rescale a recipe",
+      "description": "Given an amount of one ingredient the cook has, returns every ingredient's weight for that batch size.",
+      "tags": ["recipes", "arithmetic"],
+      "examples": [
+        "I have 1 kg of cabbage, how much salt for the sauerkraut?",
+        "Scale the pizza dough to 1.5 kg of flour."
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/plain", "application/json"]
+    }
+  ],
+  "_limits": {
+    "corpus": "10 recipe cards only. Anything outside them is refused rather than guessed.",
+    "no_nutrition": "No calorie or nutrition data exists in the corpus; those questions are refused.",
+    "not_a_general_cooking_agent": "It will not invent substitutions or food-safety advice."
+  }
+}

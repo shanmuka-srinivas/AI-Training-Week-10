@@ -1,0 +1,82 @@
+{
+  "arm": "squad",
+  "case_id": "WS-03",
+  "type": "wrong_sentence",
+  "question": "I have 600 g of plain flour for the pancakes. How much caster sugar do I need?",
+  "answer": "UNAVAILABLE: measurer returned HTTP 500 (service unavailable)",
+  "status": "degraded: measurer returned HTTP 500 (service unavailable)",
+  "passed": false,
+  "checks": [
+    {
+      "name": "did not refuse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "cites the right recipe",
+      "ok": true,
+      "detail": "cited R-003, expected R-003"
+    },
+    {
+      "name": "contains the fact",
+      "ok": false,
+      "detail": "needs one of ['48 g']"
+    }
+  ],
+  "seconds": 63.1258137000259,
+  "llm_calls": 4,
+  "input_tokens": 2145,
+  "output_tokens": 297,
+  "tokens": 2442,
+  "handoffs": [
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 1",
+      "input_tokens": 378,
+      "output_tokens": 59,
+      "tokens": 437,
+      "seconds": 13.95
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 2",
+      "input_tokens": 569,
+      "output_tokens": 62,
+      "tokens": 631,
+      "seconds": 11.58
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 3",
+      "input_tokens": 865,
+      "output_tokens": 156,
+      "tokens": 1021,
+      "seconds": 27.93
+    },
+    {
+      "role": "workers -> manager",
+      "detail": "synthesise the answer",
+      "input_tokens": 333,
+      "output_tokens": 20,
+      "tokens": 353,
+      "seconds": 6.86
+    }
+  ],
+  "worker_notes": [
+    {
+      "worker": "card_reader",
+      "ask": "Find the pancake recipe and report its id and the weights in its ingredients table.",
+      "finding": "The weights of the ingredients in the 'Buttermilk Pancakes' recipe are as follows:\n- Plain flour: 300 g\n- Cultured buttermilk: 360 g\n- Whole egg: 100 g\n- Melted butter: 45 g\n- Caster sugar: 24 g\n- Baking powder: 9 g\n- Bicarbonate of soda: 3 g\n- Fine sea salt: 4 g\n- Total batter: 845 g"
+    },
+    {
+      "worker": "measurer",
+      "ask": "Rescale the Buttermilk Pancakes (R-003) to 600 g of plain flour and report the caster sugar weight.",
+      "finding": "UNAVAILABLE: measurer returned HTTP 500 (service unavailable)"
+    }
+  ]
+}

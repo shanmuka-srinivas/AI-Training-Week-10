@@ -1,0 +1,101 @@
+{
+  "arm": "squad",
+  "case_id": "WS-03",
+  "type": "wrong_sentence",
+  "question": "I have 600 g of plain flour for the pancakes. How much caster sugar do I need?",
+  "answer": "24 g",
+  "status": "finished",
+  "passed": false,
+  "checks": [
+    {
+      "name": "did not refuse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "cites the right recipe",
+      "ok": true,
+      "detail": "cited R-003, expected R-003"
+    },
+    {
+      "name": "contains the fact",
+      "ok": false,
+      "detail": "needs one of ['48 g']"
+    }
+  ],
+  "seconds": 88.64533420000225,
+  "llm_calls": 7,
+  "input_tokens": 4156,
+  "output_tokens": 425,
+  "tokens": 4581,
+  "handoffs": [
+    {
+      "role": "cook -> manager",
+      "detail": "plan the work",
+      "input_tokens": 228,
+      "output_tokens": 42,
+      "tokens": 270,
+      "seconds": 10.09
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 1",
+      "input_tokens": 386,
+      "output_tokens": 41,
+      "tokens": 427,
+      "seconds": 11.33
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 2",
+      "input_tokens": 559,
+      "output_tokens": 74,
+      "tokens": 633,
+      "seconds": 13.81
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 3",
+      "input_tokens": 719,
+      "output_tokens": 69,
+      "tokens": 788,
+      "seconds": 12.12
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 4",
+      "input_tokens": 871,
+      "output_tokens": 81,
+      "tokens": 952,
+      "seconds": 14.15
+    },
+    {
+      "role": "manager -> card_reader",
+      "detail": "step 5",
+      "input_tokens": 1186,
+      "output_tokens": 110,
+      "tokens": 1296,
+      "seconds": 20.99
+    },
+    {
+      "role": "workers -> manager",
+      "detail": "synthesise the answer",
+      "input_tokens": 207,
+      "output_tokens": 8,
+      "tokens": 215,
+      "seconds": 3.34
+    }
+  ],
+  "worker_notes": [
+    {
+      "worker": "card_reader",
+      "ask": "Please provide the recipe card for pancakes and find the amount of caster sugar needed for 600 g of plain flour.",
+      "finding": "For 600 g of plain flour, the amount of caster sugar needed is 24 g, as the recipe uses 24 g for 300 g of plain flour."
+    }
+  ]
+}

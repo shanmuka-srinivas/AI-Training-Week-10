@@ -1,0 +1,88 @@
+# Hand-off log: every model call, with its token count
+
+A single agent holds one conversation. A squad pays again at every hand-off: the
+manager's plan, each worker's own prompt and task, and the manager's synthesis with
+all the findings. Nothing is shared between them. That is what this log prices.
+
+## single
+
+One conversation per question, 47 model calls in total across 10 cases, 58,667 tokens.
+
+| case | model calls | input tokens | output tokens | total |
+|---|---|---|---|---|
+| WS-01 | 4 | 4,367 | 267 | 4,634 |
+| WS-02 | 3 | 2,917 | 170 | 3,087 |
+| FR-01 | 8 | 9,466 | 427 | 9,893 |
+| FR-02 | 2 | 1,696 | 98 | 1,794 |
+| AL-01 | 4 | 3,962 | 208 | 4,170 |
+| AL-02 | 4 | 4,222 | 242 | 4,464 |
+| MR-01 | 8 | 12,229 | 496 | 12,725 |
+| MR-02 | 4 | 4,032 | 252 | 4,284 |
+| OK-01 | 4 | 4,657 | 240 | 4,897 |
+| OK-02 | 6 | 8,241 | 478 | 8,719 |
+
+## squad
+
+| case | hand-off | detail | input tokens | output tokens | total |
+|---|---|---|---|---|---|
+| WS-01 | cook -> manager | plan the work | 216 | 41 | 257 |
+| WS-01 | manager -> card_reader | step 1 | 385 | 46 | 431 |
+| WS-01 | manager -> card_reader | step 2 | 514 | 55 | 569 |
+| WS-01 | manager -> card_reader | step 3 | 803 | 64 | 867 |
+| WS-01 | manager -> card_reader | step 4 | 1,036 | 63 | 1,099 |
+| WS-01 | manager -> card_reader | step 5 | 1,309 | 63 | 1,372 |
+| WS-01 | workers -> manager | synthesise the answer | 168 | 40 | 208 |
+| WS-02 | cook -> manager | plan the work | 213 | 33 | 246 |
+| WS-02 | manager -> card_reader | step 1 | 377 | 45 | 422 |
+| WS-02 | manager -> card_reader | step 2 | 504 | 58 | 562 |
+| WS-02 | manager -> card_reader | step 3 | 773 | 51 | 824 |
+| WS-02 | workers -> manager | synthesise the answer | 169 | 8 | 177 |
+| FR-01 | cook -> manager | plan the work | 210 | 30 | 240 |
+| FR-01 | manager -> card_reader | step 1 | 374 | 34 | 408 |
+| FR-01 | manager -> card_reader | step 2 | 502 | 40 | 542 |
+| FR-01 | workers -> manager | synthesise the answer | 154 | 12 | 166 |
+| FR-02 | cook -> manager | plan the work | 217 | 32 | 249 |
+| FR-02 | manager -> card_reader | step 1 | 376 | 53 | 429 |
+| FR-02 | manager -> card_reader | step 2 | 515 | 52 | 567 |
+| FR-02 | manager -> card_reader | step 3 | 666 | 68 | 734 |
+| FR-02 | workers -> manager | synthesise the answer | 192 | 22 | 214 |
+| AL-01 | cook -> manager | plan the work | 215 | 31 | 246 |
+| AL-01 | manager -> card_reader | step 1 | 375 | 43 | 418 |
+| AL-01 | manager -> card_reader | step 2 | 515 | 65 | 580 |
+| AL-01 | manager -> card_reader | step 3 | 665 | 74 | 739 |
+| AL-01 | manager -> card_reader | step 4 | 831 | 66 | 897 |
+| AL-01 | workers -> manager | synthesise the answer | 173 | 25 | 198 |
+| AL-02 | cook -> manager | plan the work | 211 | 28 | 239 |
+| AL-02 | manager -> card_reader | step 1 | 372 | 41 | 413 |
+| AL-02 | manager -> card_reader | step 2 | 511 | 68 | 579 |
+| AL-02 | manager -> card_reader | step 3 | 677 | 70 | 747 |
+| AL-02 | manager -> card_reader | step 4 | 845 | 81 | 926 |
+| AL-02 | workers -> manager | synthesise the answer | 165 | 17 | 182 |
+| MR-01 | cook -> manager | plan the work | 218 | 34 | 252 |
+| MR-01 | manager -> card_reader | step 1 | 378 | 57 | 435 |
+| MR-01 | manager -> card_reader | step 2 | 611 | 73 | 684 |
+| MR-01 | manager -> card_reader | step 3 | 860 | 87 | 947 |
+| MR-01 | manager -> card_reader | step 4 | 1,140 | 61 | 1,201 |
+| MR-01 | manager -> card_reader | step 5 | 1,447 | 58 | 1,505 |
+| MR-01 | workers -> manager | synthesise the answer | 169 | 39 | 208 |
+| MR-02 | cook -> manager | plan the work | 216 | 41 | 257 |
+| MR-02 | manager -> card_reader | step 1 | 385 | 48 | 433 |
+| MR-02 | manager -> card_reader | step 2 | 512 | 56 | 568 |
+| MR-02 | manager -> card_reader | step 3 | 793 | 65 | 858 |
+| MR-02 | manager -> card_reader | step 4 | 1,082 | 62 | 1,144 |
+| MR-02 | manager -> card_reader | step 5 | 1,350 | 73 | 1,423 |
+| MR-02 | workers -> manager | synthesise the answer | 183 | 22 | 205 |
+| OK-01 | cook -> manager | plan the work | 217 | 33 | 250 |
+| OK-01 | manager -> card_reader | step 1 | 377 | 83 | 460 |
+| OK-01 | manager -> card_reader | step 2 | 546 | 78 | 624 |
+| OK-01 | manager -> card_reader | step 3 | 710 | 55 | 765 |
+| OK-01 | manager -> card_reader | step 4 | 851 | 55 | 906 |
+| OK-01 | manager -> card_reader | step 5 | 992 | 56 | 1,048 |
+| OK-01 | workers -> manager | synthesise the answer | 168 | 39 | 207 |
+| OK-02 | cook -> manager | plan the work | 221 | 35 | 256 |
+| OK-02 | manager -> card_reader | step 1 | 379 | 65 | 444 |
+| OK-02 | manager -> card_reader | step 2 | 530 | 65 | 595 |
+| OK-02 | manager -> card_reader | step 3 | 767 | 47 | 814 |
+| OK-02 | manager -> card_reader | step 4 | 1,064 | 126 | 1,190 |
+| OK-02 | workers -> manager | synthesise the answer | 253 | 69 | 322 |
+

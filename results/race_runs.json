@@ -1,0 +1,1987 @@
+{
+  "model": "Qwen2.5-3B-Instruct Q4_K_M (llama.cpp, local CPU)",
+  "selection_rule": "first two cases of each rule-checked problem type, by id",
+  "case_ids": [
+    "WS-01",
+    "WS-02",
+    "FR-01",
+    "FR-02",
+    "AL-01",
+    "AL-02",
+    "MR-01",
+    "MR-02",
+    "OK-01",
+    "OK-02"
+  ],
+  "summary": {
+    "single": {
+      "cases": 10,
+      "passed": 3,
+      "pass_rate": 0.3,
+      "p50_seconds": 45.781241700053215,
+      "p99_seconds": 96.87879879993852,
+      "total_seconds": 556.5498108000029,
+      "input_tokens": 55789,
+      "output_tokens": 2878,
+      "total_tokens": 58667,
+      "tokens_per_question": 5866.7,
+      "llm_calls_per_question": 4.7,
+      "hosted_cost_per_question": 0.00067301,
+      "hosted_cost_total": 0.0067301,
+      "local_cost_usd": 0.0
+    },
+    "squad": {
+      "cases": 10,
+      "passed": 2,
+      "pass_rate": 0.2,
+      "p50_seconds": 68.83619664999424,
+      "p99_seconds": 89.55011249997187,
+      "total_seconds": 642.3136405999539,
+      "input_tokens": 31647,
+      "output_tokens": 3101,
+      "total_tokens": 34748,
+      "tokens_per_question": 3474.8,
+      "llm_calls_per_question": 6.0,
+      "hosted_cost_per_question": 0.00044051,
+      "hosted_cost_total": 0.0044051,
+      "local_cost_usd": 0.0
+    }
+  },
+  "rows": [
+    {
+      "arm": "single",
+      "case_id": "WS-01",
+      "type": "wrong_sentence",
+      "question": "how many pancakes does the buttermilk recipe make",
+      "answer": "845 pancakes",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-003, expected R-003"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['twelve']"
+        }
+      ],
+      "seconds": 72.52746389992535,
+      "llm_calls": 4,
+      "input_tokens": 4367,
+      "output_tokens": 267,
+      "tokens": 4634,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The user wants to know how many pancakes a buttermilk recipe makes. I need to find a recipe that uses buttermilk and then count the number of pancakes it makes.",
+          "action": "search_recipes",
+          "args": {
+            "query": "buttermilk",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-003\", \"title\": \"Buttermilk Pancakes\", \"dietary_tags\": [\"vegetarian\", \"contains-dairy\", \"contains-egg\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 22.32481599994935
+        },
+        {
+          "n": 2,
+          "thought": "The search found a recipe called Buttermilk Pancakes. Now I need to count how many pancakes it makes.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-003",
+            "section": "method"
+          },
+          "observation": "{\"recipe_id\": \"R-003\", \"title\": \"Buttermilk Pancakes\", \"section\": \"Method\", \"text\": \"Whisk the dry ingredients together in a wide bowl. In a second bowl beat the egg\\ninto the buttermilk, then pour in the melted butter in a thin stream.\\n\\nFold the wet mixture into the dry with a spatula and stop while the batter is still\\nlumpy. Rest it for fifteen minutes so the raising agents can start working.\\n\\nCook on a lightly buttered griddle over medium heat, about two minutes per side,\\nturning once the surface bubbles hold their shape.\"}",
+          "server": "recipe-cards",
+          "seconds": 10.619961600052193
+        },
+        {
+          "n": 3,
+          "thought": "The method section does not explicitly mention the number of pancakes. I need to find another way to determine the number of pancakes from the recipe.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-003",
+            "section": "ingredients"
+          },
+          "observation": "{\"recipe_id\": \"R-003\", \"title\": \"Buttermilk Pancakes\", \"section\": \"Ingredients\", \"text\": \"| Ingredient | Weight | Baker's % |\\n|---|---|---|\\n| Plain flour | 300 g | 100% |\\n| Cultured buttermilk | 360 g | 120% |\\n| Whole egg | 100 g | 33.3% |\\n| Melted butter | 45 g | 15% |\\n| Caster sugar | 24 g | 8% |\\n| Baking powder | 9 g | 3% |\\n| Bicarbonate of soda | 3 g | 1% |\\n| Fine sea salt | 4 g | 1.3% |\\n| Total batter | 845 g | 281.6% |\"}",
+          "server": "recipe-cards",
+          "seconds": 12.387015199987218
+        },
+        {
+          "n": 4,
+          "thought": "The ingredients list shows the total batter weight is 845 grams, which is the amount of batter needed for the recipe. Since the recipe makes pancakes, we can assume that the total batter weight corresponds to the number of pancakes. Therefore, the Buttermilk Pancakes recipe makes 845 pancakes.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 18.413151300046593
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "WS-02",
+      "type": "wrong_sentence",
+      "question": "how much garlic in the hummus",
+      "answer": "15 grams of garlic are needed for the hummus recipe.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-004, expected R-004"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['15 g']"
+        }
+      ],
+      "seconds": 31.83013960008975,
+      "llm_calls": 3,
+      "input_tokens": 2917,
+      "output_tokens": 170,
+      "tokens": 3087,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The user wants to know how much garlic is needed for hummus. I need to find the recipe for hummus first.",
+          "action": "search_recipes",
+          "args": {
+            "query": "hummus",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-004\", \"title\": \"Classic Hummus\", \"dietary_tags\": [\"vegan\", \"gluten-free\", \"dairy-free\", \"contains-sesame\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 9.045031200046651
+        },
+        {
+          "n": 2,
+          "thought": "The search found a recipe for Classic Hummus. Now I need to find out how much garlic is in this recipe.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-004",
+            "section": "ingredients"
+          },
+          "observation": "{\"recipe_id\": \"R-004\", \"title\": \"Classic Hummus\", \"section\": \"Ingredients\", \"text\": \"| Ingredient | Weight | Baker's % |\\n|---|---|---|\\n| Dried chickpeas, soaked overnight | 300 g | 100% |\\n| Light tahini | 240 g | 80% |\\n| Lemon juice | 90 g | 30% |\\n| Garlic, peeled | 15 g | 5% |\\n| Iced water | 120 g | 40% |\\n| Fine sea salt | 9 g | 3% |\\n| Ground cumin | 3 g | 1% |\\n| Total | 777 g | 259% |\"}",
+          "server": "recipe-cards",
+          "seconds": 10.280565100023523
+        },
+        {
+          "n": 3,
+          "thought": "The ingredients list shows that 15 grams of garlic are needed for the hummus. This is the amount the user asked about.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 12.49810259998776
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "FR-01",
+      "type": "false_refusal",
+      "question": "which recipes are vegan",
+      "answer": "I couldn't finish this task (stopped: step limit (8) reached).",
+      "status": "stopped: step limit (8) reached",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": false,
+          "detail": ""
+        }
+      ],
+      "seconds": 75.14096529991366,
+      "llm_calls": 8,
+      "input_tokens": 9466,
+      "output_tokens": 427,
+      "tokens": 9893,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 5",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 6",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 7",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 8",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "I need to search for recipes that have the 'vegan' dietary tag.",
+          "action": "search_recipes",
+          "args": {
+            "query": "",
+            "dietary_tag": "vegan"
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched '' with tag 'vegan'. Tags in use: contains-dairy, contains-egg, contains-fish, contains-gluten, contains-sesame, contains-shellfish, dairy-free, gluten-free, nut-free, vegan, vegetarian.\"}",
+          "server": "recipe-cards",
+          "seconds": 7.103287900099531
+        },
+        {
+          "n": 2,
+          "thought": "The search returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan'.\"}",
+          "server": "recipe-cards",
+          "seconds": 10.12087009998504
+        },
+        {
+          "n": 3,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan recipes",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan recipes'.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.42057349998504
+        },
+        {
+          "n": 4,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan dish",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan dish'.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.447204599971883
+        },
+        {
+          "n": 5,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan meal",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan meal'.\"}",
+          "server": "recipe-cards",
+          "seconds": 10.34037220000755
+        },
+        {
+          "n": 6,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan lunch",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan lunch'.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.78104509995319
+        },
+        {
+          "n": 7,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan dinner",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan dinner'.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.406880900030956
+        },
+        {
+          "n": 8,
+          "thought": "The search still returned no recipes with the 'vegan' dietary tag. I should try again with a more specific query.",
+          "action": "search_recipes",
+          "args": {
+            "query": "vegan breakfast",
+            "dietary_tag": ""
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'vegan breakfast'.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.495292700012214
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "FR-02",
+      "type": "false_refusal",
+      "question": "is the buckwheat loaf safe for coeliacs",
+      "answer": "The buckwheat loaf is safe for coeliacs as it contains no known allergens.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-103, expected R-103"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['coeliac', 'Free from gluten']"
+        }
+      ],
+      "seconds": 16.44429549993947,
+      "llm_calls": 2,
+      "input_tokens": 1696,
+      "output_tokens": 98,
+      "tokens": 1794,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "I need to check the allergens of the buckwheat loaf recipe.",
+          "action": "ingredient_info",
+          "args": {
+            "name": "buckwheat"
+          },
+          "observation": "{\"ingredient\": \"wholegrain buckwheat flour\", \"grams_per_cup\": 120, \"allergens\": [\"none recorded\"]}",
+          "server": "ingredient-db",
+          "seconds": 6.175845699966885
+        },
+        {
+          "n": 2,
+          "thought": "The allergens of buckwheat flour are none recorded, which means it's safe for coeliacs.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 10.26450799999293
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "AL-01",
+      "type": "allergen_yes_no",
+      "question": "does the traditional kimchi have fish in it",
+      "answer": "I couldn't finish this task (stopped: repeated the same tool call (ingredient_info) 3 times).",
+      "status": "stopped: repeated the same tool call (ingredient_info) 3 times",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": false,
+          "detail": ""
+        }
+      ],
+      "seconds": 36.57520020008087,
+      "llm_calls": 4,
+      "input_tokens": 3962,
+      "output_tokens": 208,
+      "tokens": 4170,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The user wants to know if traditional kimchi contains fish. I will check the allergens of a typical kimchi recipe to find out.",
+          "action": "ingredient_info",
+          "args": {
+            "name": "kimchi"
+          },
+          "observation": "{\"error\": \"'kimchi' is not in the ingredient database.\", \"did_you_mean\": [], \"next_step\": \"Try one of the suggestions, or the plainest form of the name, e.g. 'water'.\"}",
+          "server": "ingredient-db",
+          "seconds": 8.016602599993348
+        },
+        {
+          "n": 2,
+          "thought": "The name 'kimchi' was not found in the database, so I will try the plainest form of the name, 'kim' to find out.",
+          "action": "ingredient_info",
+          "args": {
+            "name": "kim"
+          },
+          "observation": "{\"error\": \"'kim' is not in the ingredient database.\", \"did_you_mean\": [], \"next_step\": \"Try one of the suggestions, or the plainest form of the name, e.g. 'water'.\"}",
+          "server": "ingredient-db",
+          "seconds": 9.352565700071864
+        },
+        {
+          "n": 3,
+          "thought": "The name 'kim' was not found in the database, so I will try the plainest form of the name, 'kimchi' to find out.",
+          "action": "ingredient_info",
+          "args": {
+            "name": "kimchi"
+          },
+          "observation": "{\"error\": \"'kimchi' is not in the ingredient database.\", \"did_you_mean\": [], \"next_step\": \"Try one of the suggestions, or the plainest form of the name, e.g. 'water'.\"}",
+          "server": "ingredient-db",
+          "seconds": 9.541790200048126
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "AL-02",
+      "type": "allergen_yes_no",
+      "question": "do the pancakes contain nuts",
+      "answer": "The Buttermilk Pancakes recipe does not contain nuts.",
+      "status": "finished",
+      "passed": true,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "seconds": 42.940270100021735,
+      "llm_calls": 4,
+      "input_tokens": 4222,
+      "output_tokens": 242,
+      "tokens": 4464,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "I need to check the allergens of the pancake recipe to see if it contains nuts.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-123",
+            "section": "allergens"
+          },
+          "observation": "{\"error\": \"No recipe with id 'R-123'. Known ids: R-001, R-002, R-003, R-004, R-101, R-102, R-103, R-104, R-105, R-106. Use search_recipes if you only have the recipe's name.\"}",
+          "server": "recipe-cards",
+          "seconds": 8.435076399939135
+        },
+        {
+          "n": 2,
+          "thought": "The recipe with id R-123 does not exist. I need to search for the recipe id using the recipe name.",
+          "action": "search_recipes",
+          "args": {
+            "query": "pancakes",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-003\", \"title\": \"Buttermilk Pancakes\", \"dietary_tags\": [\"vegetarian\", \"contains-dairy\", \"contains-egg\", \"contains-gluten\"]}, {\"recipe_id\": \"R-104\", \"title\": \"Traditional Napa Cabbage Kimchi\", \"dietary_tags\": [\"gluten-free\", \"dairy-free\", \"contains-fish\", \"contains-shellfish\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 10.310137600055896
+        },
+        {
+          "n": 3,
+          "thought": "The search results show two recipes, but neither contains nuts. I need to check the allergens of the first recipe, R-003, to confirm it does not contain nuts.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-003",
+            "section": "allergens"
+          },
+          "observation": "{\"recipe_id\": \"R-003\", \"title\": \"Buttermilk Pancakes\", \"section\": \"Allergen note\", \"text\": \"Contains wheat gluten, cow's milk dairy and hen egg.\"}",
+          "server": "recipe-cards",
+          "seconds": 13.189992899890058
+        },
+        {
+          "n": 4,
+          "thought": "The allergen note for the Buttermilk Pancakes recipe mentions wheat gluten, but not nuts. I can conclude that the pancakes do not contain nuts.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 10.99572360003367
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "MR-01",
+      "type": "must_refuse",
+      "question": "how many calories in a slice of the country sourdough",
+      "answer": "I couldn't finish this task (stopped: step limit (8) reached).",
+      "status": "stopped: step limit (8) reached",
+      "passed": true,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "seconds": 96.87879879993852,
+      "llm_calls": 8,
+      "input_tokens": 12229,
+      "output_tokens": 496,
+      "tokens": 12725,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 5",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 6",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 7",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 8",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "To find the calorie count, I need to get the recipe details first.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-123",
+            "section": "about"
+          },
+          "observation": "{\"error\": \"No recipe with id 'R-123'. Known ids: R-001, R-002, R-003, R-004, R-101, R-102, R-103, R-104, R-105, R-106. Use search_recipes if you only have the recipe's name.\"}",
+          "server": "recipe-cards",
+          "seconds": 8.002191900042817
+        },
+        {
+          "n": 2,
+          "thought": "The recipe id R-123 is not known. I need to find the recipe id first.",
+          "action": "search_recipes",
+          "args": {
+            "query": "country sourdough",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-101\", \"title\": \"Two-Kilo Country Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}, {\"recipe_id\": \"R-103\", \"title\": \"Gluten-Free Buckwheat Sourdough\", \"dietary_tags\": [\"gluten-free\", \"vegan\", \"dairy-free\", \"nut-free\"]}, {\"recipe_id\": \"R-102\", \"title\": \"One Hundred Percent Wholegrain Rye Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 9.820363700040616
+        },
+        {
+          "n": 3,
+          "thought": "The recipes have titles but not the exact id. I need to find the id again with more details.",
+          "action": "search_recipes",
+          "args": {
+            "query": "country sourdough",
+            "dietary_tag": "contains-gluten"
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-101\", \"title\": \"Two-Kilo Country Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}, {\"recipe_id\": \"R-102\", \"title\": \"One Hundred Percent Wholegrain Rye Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 10.934974299976602
+        },
+        {
+          "n": 4,
+          "thought": "The recipes have titles but not the exact id. I need to find the id again with more details.",
+          "action": "search_recipes",
+          "args": {
+            "query": "country sourdough",
+            "dietary_tag": "gluten-free"
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-103\", \"title\": \"Gluten-Free Buckwheat Sourdough\", \"dietary_tags\": [\"gluten-free\", \"vegan\", \"dairy-free\", \"nut-free\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 10.545885600033216
+        },
+        {
+          "n": 5,
+          "thought": "The recipe id R-103 matches the query 'country sourdough' and has the dietary tag 'gluten-free'. I can now get the recipe details.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-103",
+            "section": "about"
+          },
+          "observation": "{\"recipe_id\": \"R-103\", \"title\": \"Gluten-Free Buckwheat Sourdough\", \"section\": \"About this loaf\", \"text\": \"Buckwheat is not wheat and is not related to it. It is a seed from the same\\nfamily as rhubarb, which is why a loaf built on it can be sold to somebody with\\ncoeliac disease and why it tastes nothing like a wheat loaf. Expect something\\ndark, faintly grassy and close-crumbed, closer to a Baltic dark bread than to a\\nwhite sourdough.\\n\\nBecause there is no gluten at all, every scrap of structure in this loaf comes\\nfrom psyllium husk. Psyllium is a soluble fibre that grabs many times its own\\nweight in water and turns into a gel that behaves, mechanically, a little like a\\ngluten network. Take it out and you have a bowl of wet flour that bakes into\\ngravel. This is the one ingredient in the formula that cannot be substituted or\\nscaled by eye.\\n\\nThe hydration reads as one hundred and ten percent, which sounds absurd until\\nyou remember that the psyllium is holding most of it and that buckwheat and\\nbrown rice flour are both far thirstier than wheat. The third column is baker's\\npercentage against the combined flour weight.\"}",
+          "server": "recipe-cards",
+          "seconds": 11.975135499960743
+        },
+        {
+          "n": 6,
+          "thought": "The text describes the gluten-free buckwheat sourdough but does not mention calories. I need to find the calories in this recipe.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-103",
+            "section": "ingredients"
+          },
+          "observation": "{\"recipe_id\": \"R-103\", \"title\": \"Gluten-Free Buckwheat Sourdough\", \"section\": \"Ingredients\", \"text\": \"| Ingredient | Weight | Baker's % |\\n|---|---|---|\\n| Wholegrain buckwheat flour | 400 g | 66.7% |\\n| Brown rice flour | 200 g | 33.3% |\\n| Water (30 C) | 660 g | 110% |\\n| Buckwheat starter | 120 g | 20% |\\n| Psyllium husk, whole | 18 g | 3% |\\n| Fine sea salt | 12 g | 2% |\\n| Total dough | 1410 g | 235% |\"}",
+          "server": "recipe-cards",
+          "seconds": 13.640550199896097
+        },
+        {
+          "n": 7,
+          "thought": "The ingredients list is provided but does not include calories. I need to find the calories for one slice of this recipe.",
+          "action": "scale_recipe",
+          "args": {
+            "recipe_id": "R-103",
+            "ingredient": "Wholegrain buckwheat flour",
+            "target_grams": 1
+          },
+          "observation": "{\"warning\": \"Scaling Gluten-Free Buckwheat Sourdough so that 'Wholegrain buckwheat flour' weighs 1.0 g multiplies the whole recipe by 0x, which is almost certainly not what was meant.\", \"likely_intended\": \"The cook probably has 1.0 g of 'Wholegrain buckwheat flour', the main ingredient (the card uses 400 g of it).\", \"next_step\": \"Call scale_recipe('R-103', 'Wholegrain buckwheat flour', 1) and read the figure for 'Wholegrain buckwheat flour' out of the result.\", \"nothing_was_scaled\": true}",
+          "server": "recipe-cards",
+          "seconds": 14.314524999936111
+        },
+        {
+          "n": 8,
+          "thought": "The scaling of 1.0 g of wholegrain buckwheat flour multiplies the whole recipe by 0x, which is not what the cook meant. I need to scale the whole recipe by the weight of the flour.",
+          "action": "scale_recipe",
+          "args": {
+            "recipe_id": "R-103",
+            "ingredient": "Total dough",
+            "target_grams": 1000
+          },
+          "observation": "{\"error\": \"No ingredient matching 'Total dough' in Gluten-Free Buckwheat Sourdough (R-103).\", \"ingredients_in_this_recipe\": [\"Wholegrain buckwheat flour\", \"Brown rice flour\", \"Water (30 C)\", \"Buckwheat starter\", \"Psyllium husk, whole\", \"Fine sea salt\"], \"next_step\": \"Call scale_recipe again with one of the ingredient names listed above, exactly as written.\"}",
+          "server": "recipe-cards",
+          "seconds": 17.620196099975146
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "MR-02",
+      "type": "must_refuse",
+      "question": "what wine goes with the rosemary focaccia",
+      "answer": "For Rosemary Focaccia, a light and fruity wine like Pinot Noir or Sauvignon Blanc would complement the dish well.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": false,
+          "detail": "answered: For Rosemary Focaccia, a light and fruity wine like Pinot Noir or Sauvignon Blan"
+        }
+      ],
+      "seconds": 44.10286380001344,
+      "llm_calls": 4,
+      "input_tokens": 4032,
+      "output_tokens": 252,
+      "tokens": 4284,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The user wants to know which wine pairs well with rosemary focaccia. I need to search for recipes that mention rosemary focaccia and find a suitable wine pairing.",
+          "action": "search_recipes",
+          "args": {
+            "query": "rosemary focaccia",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-001\", \"title\": \"Rosemary Focaccia\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 10.970197799964808
+        },
+        {
+          "n": 2,
+          "thought": "I found a recipe for Rosemary Focaccia. Now I need to find a wine pairing for this dish.",
+          "action": "search_recipes",
+          "args": {
+            "query": "wine pairing",
+            "dietary_tag": "contains-gluten"
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'wine pairing' with tag 'contains-gluten'. Tags in use: contains-dairy, contains-egg, contains-fish, contains-gluten, contains-sesame, contains-shellfish, dairy-free, gluten-free, nut-free, vegan, vegetarian.\"}",
+          "server": "recipe-cards",
+          "seconds": 9.75484269997105
+        },
+        {
+          "n": 3,
+          "thought": "No wine pairing recipes found with the specific dietary tag 'contains-gluten'. I will try to find a general wine pairing instead.",
+          "action": "search_recipes",
+          "args": {
+            "query": "wine pairing",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [], \"hint\": \"Nothing matched 'wine pairing'.\"}",
+          "server": "recipe-cards",
+          "seconds": 10.463630000012927
+        },
+        {
+          "n": 4,
+          "thought": "No wine pairing recipes found in general. I will provide a general recommendation based on the rosemary focaccia recipe found earlier.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 12.904839700087905
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "OK-01",
+      "type": "already_working",
+      "question": "how long should I knead the neapolitan dough",
+      "answer": "The kneading time for Neapolitan Pizza Dough is ten minutes.",
+      "status": "finished",
+      "passed": true,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-002, expected R-002"
+        },
+        {
+          "name": "contains the fact",
+          "ok": true,
+          "detail": "needs one of ['ten minutes']"
+        }
+      ],
+      "seconds": 47.45961960009299,
+      "llm_calls": 4,
+      "input_tokens": 4657,
+      "output_tokens": 240,
+      "tokens": 4897,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The user wants to know the kneading time for neapolitan dough, which is a specific recipe. I need to find the recipe ID first.",
+          "action": "search_recipes",
+          "args": {
+            "query": "neapolitan dough"
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-101\", \"title\": \"Two-Kilo Country Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}, {\"recipe_id\": \"R-001\", \"title\": \"Rosemary Focaccia\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}, {\"recipe_id\": \"R-002\", \"title\": \"Neapolitan Pizza Dough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}, {\"recipe_id\": \"R-103\", \"title\": \"Gluten-Free Buckwheat Sourdough\", \"dietary_tags\": [\"gluten-free\", \"vegan\", \"dairy-free\", \"nut-free\"]}, {\"recipe_id\": \"R-102\", \"title\": \"One Hundred Percent Wholegrain Rye Sourdough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 9.27314970002044
+        },
+        {
+          "n": 2,
+          "thought": "The search returned several recipes, but none specifically named 'Neapolitan Dough'. I need to narrow it down further.",
+          "action": "search_recipes",
+          "args": {
+            "query": "Neapolitan",
+            "dietary_tag": "contains-gluten"
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-002\", \"title\": \"Neapolitan Pizza Dough\", \"dietary_tags\": [\"vegan\", \"dairy-free\", \"contains-gluten\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 12.806659499998204
+        },
+        {
+          "n": 3,
+          "thought": "Now I have found the recipe ID for Neapolitan Pizza Dough, which contains the kneading time information. Next, I need to read the method section of this recipe.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-002",
+            "section": "method"
+          },
+          "observation": "{\"recipe_id\": \"R-002\", \"title\": \"Neapolitan Pizza Dough\", \"section\": \"Method\", \"text\": \"Dissolve the salt in the water first, then add roughly a tenth of the flour and\\nwhisk to a slurry. Crumble in the yeast, add the remaining flour, and mix until the\\ndough comes together into a rough mass.\\n\\nKnead for ten minutes until the dough is smooth and springs back when pressed.\\nCover and rest the bulk mass for two hours at room temperature, then divide into\\nsix equal balls and refrigerate for at least twenty-four hours.\\n\\nBring the balls back to room temperature for three hours before stretching. Bake in\\na wood oven at 450 C for ninety seconds.\"}",
+          "server": "recipe-cards",
+          "seconds": 12.198758200043812
+        },
+        {
+          "n": 4,
+          "thought": "The method section of the Neapolitan Pizza Dough recipe includes the kneading time, which is ten minutes. I can now provide the answer.",
+          "action": "final_answer",
+          "args": {},
+          "observation": "",
+          "server": "-",
+          "seconds": 13.172200900036842
+        }
+      ]
+    },
+    {
+      "arm": "single",
+      "case_id": "OK-02",
+      "type": "already_working",
+      "question": "my sauerkraut smells like sulphur, is it ruined?",
+      "answer": "I couldn't finish this task (stopped: repeated the same tool call (get_recipe_section) 3 times).",
+      "status": "stopped: repeated the same tool call (get_recipe_section) 3 times",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": false,
+          "detail": ""
+        }
+      ],
+      "seconds": 92.6501939999871,
+      "llm_calls": 6,
+      "input_tokens": 8241,
+      "output_tokens": 478,
+      "tokens": 8719,
+      "handoffs": [
+        {
+          "role": "cook -> agent",
+          "detail": "step 1",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 2",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 3",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 4",
+          "tokens": null
+        },
+        {
+          "role": "cook -> agent",
+          "detail": "step 5",
+          "tokens": null
+        }
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "thought": "The smell of sulfur in sauerkraut could indicate spoilage or improper fermentation. I need to check the recipe to see if it's safe to eat.",
+          "action": "search_recipes",
+          "args": {
+            "query": "sauerkraut",
+            "dietary_tag": null
+          },
+          "observation": "{\"results\": [{\"recipe_id\": \"R-106\", \"title\": \"Small-Batch Caraway Sauerkraut\", \"dietary_tags\": [\"vegan\", \"gluten-free\", \"dairy-free\", \"nut-free\"]}]}",
+          "server": "recipe-cards",
+          "seconds": 10.97246570000425
+        },
+        {
+          "n": 2,
+          "thought": "The recipe is vegan, gluten-free, dairy-free, and nut-free. I need to check the fermentation process to determine if the sauerkraut is spoiled.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-106",
+            "section": "method"
+          },
+          "observation": "{\"recipe_id\": \"R-106\", \"title\": \"Small-Batch Caraway Sauerkraut\", \"section\": \"Method\", \"text\": \"Reserve two outer cabbage leaves whole before shredding the rest, and set them\\naside. They become the cap that holds everything under the brine at the end.\\nQuarter the cabbage, cut out the dense core, and shred the leaves as finely as\\nyou can manage. Finer shreds release liquid faster and pack tighter.\\n\\nToss the shreds with the fine sea salt in a wide bowl and leave them for twenty\\nminutes. The salt needs that time to start drawing water out through the cell\\nwalls, and massaging before it has done so is just hard work for nothing.\\n\\nMassage firmly for five minutes until enough brine pools in the bottom of the\\nbowl to cover the cabbage when pressed. Squeeze rather than stir. The cabbage\\nshould reduce visibly in volume and go from crisp to limp. If after five minutes\\nthere is still not enough liquid, leave it another twenty minutes and try again\\nrather than adding water.\\n\\nAdd the caraway and the cracked juniper, then pack the cabbage into the jar in\\nsmall handfuls, pressing each one down hard with a fist or a wooden tamper\\nbefore adding the next. Pour in every drop of brine left in the bowl. Lay the\\nreserved whole leaves on top as a cap and weight them with a small glass or a\\nfermentation weight so nothing floats above the brine line.\\n\\nFerment at 18 C for fourteen days, burping the jar daily for the first week.\\nFermentation is vigorous for the first three or four days and then quietens. A\\ncooler room means a slower, cleaner and generally better ferment, so 18 C is\\npreferable to 22 C even though it takes longer.\"}",
+          "server": "recipe-cards",
+          "seconds": 12.271919899969362
+        },
+        {
+          "n": 3,
+          "thought": "The recipe method mentions that the cabbage should reduce visibly in volume and go from crisp to limp after 5 minutes of massaging. If the sauerkraut smells like sulfur, it might be due to improper fermentation or an issue with the cabbage. I need to check the fermentation process further.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-106",
+            "section": "allergens"
+          },
+          "observation": "{\"recipe_id\": \"R-106\", \"title\": \"Small-Batch Caraway Sauerkraut\", \"section\": \"Allergen note\", \"text\": \"Free from gluten, dairy, egg, nuts, fish and shellfish. Suitable for vegans.\"}",
+          "server": "recipe-cards",
+          "seconds": 19.481942299986258
+        },
+        {
+          "n": 4,
+          "thought": "The recipe is free from gluten, dairy, egg, nuts, fish and shellfish, and suitable for vegans. The sauerkraut smells like sulfur, which could indicate spoilage or improper fermentation. I need to check the fermentation process further.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-106",
+            "section": "method"
+          },
+          "observation": "{\"recipe_id\": \"R-106\", \"title\": \"Small-Batch Caraway Sauerkraut\", \"section\": \"Method\", \"text\": \"Reserve two outer cabbage leaves whole before shredding the rest, and set them\\naside. They become the cap that holds everything under the brine at the end.\\nQuarter the cabbage, cut out the dense core, and shred the leaves as finely as\\nyou can manage. Finer shreds release liquid faster and pack tighter.\\n\\nToss the shreds with the fine sea salt in a wide bowl and leave them for twenty\\nminutes. The salt needs that time to start drawing water out through the cell\\nwalls, and massaging before it has done so is just hard work for nothing.\\n\\nMassage firmly for five minutes until enough brine pools in the bottom of the\\nbowl to cover the cabbage when pressed. Squeeze rather than stir. The cabbage\\nshould reduce visibly in volume and go from crisp to limp. If after five minutes\\nthere is still not enough liquid, leave it another twenty minutes and try again\\nrather than adding water.\\n\\nAdd the caraway and the cracked juniper, then pack the cabbage into the jar in\\nsmall handfuls, pressing each one down hard with a fist or a wooden tamper\\nbefore adding the next. Pour in every drop of brine left in the bowl. Lay the\\nreserved whole leaves on top as a cap and weight them with a small glass or a\\nfermentation weight so nothing floats above the brine line.\\n\\nFerment at 18 C for fourteen days, burping the jar daily for the first week.\\nFermentation is vigorous for the first three or four days and then quietens. A\\ncooler room means a slower, cleaner and generally better ferment, so 18 C is\\npreferable to 22 C even though it takes longer.\"}",
+          "server": "recipe-cards",
+          "seconds": 15.703019300010055
+        },
+        {
+          "n": 5,
+          "thought": "The method section mentions massaging the cabbage for five minutes until enough brine pools. If the sauerkraut smells like sulfur, it might be due to improper fermentation or an issue with the cabbage. I need to check the fermentation process further.",
+          "action": "get_recipe_section",
+          "args": {
+            "recipe_id": "R-106",
+            "section": "allergens"
+          },
+          "observation": "{\"recipe_id\": \"R-106\", \"title\": \"Small-Batch Caraway Sauerkraut\", \"section\": \"Allergen note\", \"text\": \"Free from gluten, dairy, egg, nuts, fish and shellfish. Suitable for vegans.\"}",
+          "server": "recipe-cards",
+          "seconds": 18.431447200011462
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "WS-01",
+      "type": "wrong_sentence",
+      "question": "how many pancakes does the buttermilk recipe make",
+      "answer": "card_reader (asked: Please provide the recipe card for the buttermilk recipe and read the section that include): (card_reader ran out of steps without a finding)",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-003, expected R-003"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['twelve']"
+        }
+      ],
+      "seconds": 79.92314309999347,
+      "llm_calls": 7,
+      "input_tokens": 4431,
+      "output_tokens": 372,
+      "tokens": 4803,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 216,
+          "output_tokens": 41,
+          "tokens": 257,
+          "seconds": 9.67
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 385,
+          "output_tokens": 46,
+          "tokens": 431,
+          "seconds": 11.47
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 514,
+          "output_tokens": 55,
+          "tokens": 569,
+          "seconds": 9.75
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 803,
+          "output_tokens": 64,
+          "tokens": 867,
+          "seconds": 13.14
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 1036,
+          "output_tokens": 63,
+          "tokens": 1099,
+          "seconds": 12.26
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 5",
+          "input_tokens": 1309,
+          "output_tokens": 63,
+          "tokens": 1372,
+          "seconds": 13.02
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 168,
+          "output_tokens": 40,
+          "tokens": 208,
+          "seconds": 7.79
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the recipe card for the buttermilk recipe and read the section that includes the number of pancakes it makes.",
+          "finding": "(card_reader ran out of steps without a finding)"
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "WS-02",
+      "type": "wrong_sentence",
+      "question": "how much garlic in the hummus",
+      "answer": "15 g",
+      "status": "finished",
+      "passed": true,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-004, expected R-004"
+        },
+        {
+          "name": "contains the fact",
+          "ok": true,
+          "detail": "needs one of ['15 g']"
+        }
+      ],
+      "seconds": 42.13002579996828,
+      "llm_calls": 5,
+      "input_tokens": 2036,
+      "output_tokens": 195,
+      "tokens": 2231,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 213,
+          "output_tokens": 33,
+          "tokens": 246,
+          "seconds": 7.13
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 377,
+          "output_tokens": 45,
+          "tokens": 422,
+          "seconds": 11.14
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 504,
+          "output_tokens": 58,
+          "tokens": 562,
+          "seconds": 10.14
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 773,
+          "output_tokens": 51,
+          "tokens": 824,
+          "seconds": 10.75
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 169,
+          "output_tokens": 8,
+          "tokens": 177,
+          "seconds": 2.95
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the recipe card for hummus and indicate the amount of garlic listed.",
+          "finding": "The amount of garlic listed in the hummus recipe is 15 g."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "FR-01",
+      "type": "false_refusal",
+      "question": "which recipes are vegan",
+      "answer": "No recipes found marked as vegan.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "names at least 2",
+          "ok": false,
+          "detail": "found []"
+        }
+      ],
+      "seconds": 26.969944300013594,
+      "llm_calls": 4,
+      "input_tokens": 1240,
+      "output_tokens": 116,
+      "tokens": 1356,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 210,
+          "output_tokens": 30,
+          "tokens": 240,
+          "seconds": 6.78
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 374,
+          "output_tokens": 34,
+          "tokens": 408,
+          "seconds": 9.51
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 502,
+          "output_tokens": 40,
+          "tokens": 542,
+          "seconds": 7.27
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 154,
+          "output_tokens": 12,
+          "tokens": 166,
+          "seconds": 3.41
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide a list of all recipes that are marked as vegan.",
+          "finding": "No recipes found marked as vegan."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "FR-02",
+      "type": "false_refusal",
+      "question": "is the buckwheat loaf safe for coeliacs",
+      "answer": "The buckwheat loaf is not safe for coeliacs as it contains gluten.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-103, expected R-103"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['coeliac', 'Free from gluten']"
+        }
+      ],
+      "seconds": 45.851383200031705,
+      "llm_calls": 5,
+      "input_tokens": 1966,
+      "output_tokens": 227,
+      "tokens": 2193,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 217,
+          "output_tokens": 32,
+          "tokens": 249,
+          "seconds": 7.0
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 376,
+          "output_tokens": 53,
+          "tokens": 429,
+          "seconds": 12.39
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 515,
+          "output_tokens": 52,
+          "tokens": 567,
+          "seconds": 9.22
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 666,
+          "output_tokens": 68,
+          "tokens": 734,
+          "seconds": 11.93
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 192,
+          "output_tokens": 22,
+          "tokens": 214,
+          "seconds": 5.29
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the allergens section from the buckwheat loaf recipe card.",
+          "finding": "The allergens for the Gluten-Free Buckwheat Sourdough recipe are gluten, dairy, egg, nuts, fish and shellfish. Milled on gluten-free dedicated equipment."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "AL-01",
+      "type": "allergen_yes_no",
+      "question": "does the traditional kimchi have fish in it",
+      "answer": "Free from fish, shellfish, gluten, dairy, egg and nuts. Suitable for vegans.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-104, expected R-104"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['Contains fish']"
+        }
+      ],
+      "seconds": 58.67105979996268,
+      "llm_calls": 6,
+      "input_tokens": 2774,
+      "output_tokens": 304,
+      "tokens": 3078,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 215,
+          "output_tokens": 31,
+          "tokens": 246,
+          "seconds": 6.82
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 375,
+          "output_tokens": 43,
+          "tokens": 418,
+          "seconds": 10.68
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 515,
+          "output_tokens": 65,
+          "tokens": 580,
+          "seconds": 11.37
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 665,
+          "output_tokens": 74,
+          "tokens": 739,
+          "seconds": 12.62
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 831,
+          "output_tokens": 66,
+          "tokens": 897,
+          "seconds": 11.67
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 173,
+          "output_tokens": 25,
+          "tokens": 198,
+          "seconds": 5.5
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the allergens section from the traditional kimchi recipe card.",
+          "finding": "Free from fish, shellfish, gluten, dairy, egg and nuts. Suitable for vegans."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "AL-02",
+      "type": "allergen_yes_no",
+      "question": "do the pancakes contain nuts",
+      "answer": "No allergens found related to nuts in the recipe card.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": false,
+          "detail": "answered: No allergens found related to nuts in the recipe card."
+        }
+      ],
+      "seconds": 62.474493699963205,
+      "llm_calls": 6,
+      "input_tokens": 2781,
+      "output_tokens": 305,
+      "tokens": 3086,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 211,
+          "output_tokens": 28,
+          "tokens": 239,
+          "seconds": 6.36
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 372,
+          "output_tokens": 41,
+          "tokens": 413,
+          "seconds": 10.42
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 511,
+          "output_tokens": 68,
+          "tokens": 579,
+          "seconds": 11.98
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 677,
+          "output_tokens": 70,
+          "tokens": 747,
+          "seconds": 12.77
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 845,
+          "output_tokens": 81,
+          "tokens": 926,
+          "seconds": 16.28
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 165,
+          "output_tokens": 17,
+          "tokens": 182,
+          "seconds": 4.66
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the allergens section from the recipe card.",
+          "finding": "No recipe card found with the query 'pasta' and dietary tag 'gluten-free'."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "MR-01",
+      "type": "must_refuse",
+      "question": "how many calories in a slice of the country sourdough",
+      "answer": "card_reader (asked: Please provide the nutritional information for a slice of country sourdough, including cal): (card_reader ran out of steps without a finding)",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": false,
+          "detail": "answered: card_reader (asked: Please provide the nutritional information for a slice of co"
+        }
+      ],
+      "seconds": 85.95913019997533,
+      "llm_calls": 7,
+      "input_tokens": 4823,
+      "output_tokens": 409,
+      "tokens": 5232,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 218,
+          "output_tokens": 34,
+          "tokens": 252,
+          "seconds": 8.09
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 378,
+          "output_tokens": 57,
+          "tokens": 435,
+          "seconds": 13.35
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 611,
+          "output_tokens": 73,
+          "tokens": 684,
+          "seconds": 14.0
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 860,
+          "output_tokens": 87,
+          "tokens": 947,
+          "seconds": 17.66
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 1140,
+          "output_tokens": 61,
+          "tokens": 1201,
+          "seconds": 12.31
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 5",
+          "input_tokens": 1447,
+          "output_tokens": 58,
+          "tokens": 1505,
+          "seconds": 12.55
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 169,
+          "output_tokens": 39,
+          "tokens": 208,
+          "seconds": 7.98
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the nutritional information for a slice of country sourdough, including calories.",
+          "finding": "(card_reader ran out of steps without a finding)"
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "MR-02",
+      "type": "must_refuse",
+      "question": "what wine goes with the rosemary focaccia",
+      "answer": "The specialists found no information about wine pairings for the rosemary focaccia.",
+      "status": "finished",
+      "passed": true,
+      "checks": [
+        {
+          "name": "refused when it should",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "seconds": 75.19789960002527,
+      "llm_calls": 7,
+      "input_tokens": 4521,
+      "output_tokens": 367,
+      "tokens": 4888,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 216,
+          "output_tokens": 41,
+          "tokens": 257,
+          "seconds": 8.48
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 385,
+          "output_tokens": 48,
+          "tokens": 433,
+          "seconds": 11.59
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 512,
+          "output_tokens": 56,
+          "tokens": 568,
+          "seconds": 9.69
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 793,
+          "output_tokens": 65,
+          "tokens": 858,
+          "seconds": 13.02
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 1082,
+          "output_tokens": 62,
+          "tokens": 1144,
+          "seconds": 12.74
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 5",
+          "input_tokens": 1350,
+          "output_tokens": 73,
+          "tokens": 1423,
+          "seconds": 14.44
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 183,
+          "output_tokens": 22,
+          "tokens": 205,
+          "seconds": 5.24
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the recipe card for rosemary focaccia and read the section that includes wine pairings or beverage suggestions.",
+          "finding": "The recipe card for rosemary focaccia does not contain wine pairings or beverage suggestions in any of the sections provided."
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "OK-01",
+      "type": "already_working",
+      "question": "how long should I knead the neapolitan dough",
+      "answer": "card_reader (asked: Please provide the kneading time mentioned in the neapolitan dough recipe card.): (card_reader ran out of steps without a finding)",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-002, expected R-002"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['ten minutes']"
+        }
+      ],
+      "seconds": 75.58644840004854,
+      "llm_calls": 7,
+      "input_tokens": 3861,
+      "output_tokens": 399,
+      "tokens": 4260,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 217,
+          "output_tokens": 33,
+          "tokens": 250,
+          "seconds": 7.14
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 377,
+          "output_tokens": 83,
+          "tokens": 460,
+          "seconds": 18.38
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 546,
+          "output_tokens": 78,
+          "tokens": 624,
+          "seconds": 13.22
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 710,
+          "output_tokens": 55,
+          "tokens": 765,
+          "seconds": 9.6
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 851,
+          "output_tokens": 55,
+          "tokens": 906,
+          "seconds": 9.71
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 5",
+          "input_tokens": 992,
+          "output_tokens": 56,
+          "tokens": 1048,
+          "seconds": 9.9
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 168,
+          "output_tokens": 39,
+          "tokens": 207,
+          "seconds": 7.64
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the kneading time mentioned in the neapolitan dough recipe card.",
+          "finding": "(card_reader ran out of steps without a finding)"
+        }
+      ]
+    },
+    {
+      "arm": "squad",
+      "case_id": "OK-02",
+      "type": "already_working",
+      "question": "my sauerkraut smells like sulphur, is it ruined?",
+      "answer": "Please check the temperature and fermentation time. Ideal conditions for sauerkraut fermentation are around 18-22°C (64-72°F) with a consistent temperature and humidity. If the fermentation is too fast or the environment is too warm, it can lead to off-flavors like sulfur.",
+      "status": "finished",
+      "passed": false,
+      "checks": [
+        {
+          "name": "did not refuse",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "source present",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cites the right recipe",
+          "ok": true,
+          "detail": "cited R-106, expected R-106"
+        },
+        {
+          "name": "contains the fact",
+          "ok": false,
+          "detail": "needs one of ['first three days']"
+        }
+      ],
+      "seconds": 89.55011249997187,
+      "llm_calls": 6,
+      "input_tokens": 3214,
+      "output_tokens": 407,
+      "tokens": 3621,
+      "handoffs": [
+        {
+          "role": "cook -> manager",
+          "detail": "plan the work",
+          "input_tokens": 221,
+          "output_tokens": 35,
+          "tokens": 256,
+          "seconds": 7.55
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 1",
+          "input_tokens": 379,
+          "output_tokens": 65,
+          "tokens": 444,
+          "seconds": 14.39
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 2",
+          "input_tokens": 530,
+          "output_tokens": 65,
+          "tokens": 595,
+          "seconds": 13.37
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 3",
+          "input_tokens": 767,
+          "output_tokens": 47,
+          "tokens": 814,
+          "seconds": 9.95
+        },
+        {
+          "role": "manager -> card_reader",
+          "detail": "step 4",
+          "input_tokens": 1064,
+          "output_tokens": 126,
+          "tokens": 1190,
+          "seconds": 28.43
+        },
+        {
+          "role": "workers -> manager",
+          "detail": "synthesise the answer",
+          "input_tokens": 253,
+          "output_tokens": 69,
+          "tokens": 322,
+          "seconds": 15.86
+        }
+      ],
+      "worker_notes": [
+        {
+          "worker": "card_reader",
+          "ask": "Please provide the ingredients and method for making sauerkraut from the recipe card.",
+          "finding": "Ingredients: White cabbage, finely shredded - 350 g; Fine sea salt - 7 g; Caraway seed - 2 g; Juniper berries, cracked - 1 g. Method: Reserve two outer cabbage leaves whole. Quarter the cabbage, cut out the dense core, and shred the leaves. Toss the shreds with the fine sea salt. Massage for five minutes until enough brine pools. Squeeze rather than stir."
+        }
+      ]
+    }
+  ],
+  "worker_max_steps": 5
+}
